@@ -80,7 +80,7 @@ function extractEnvCredentials(service: string): Record<string, string> {
 }
 
 function deepMerge<T extends Record<string, unknown>>(base: T, override: T): T {
-  const result = { ...base };
+  const result: Record<string, unknown> = { ...base };
   for (const [key, value] of Object.entries(override)) {
     if (
       value !== null &&
@@ -92,12 +92,12 @@ function deepMerge<T extends Record<string, unknown>>(base: T, override: T): T {
       result[key] = deepMerge(
         result[key] as Record<string, unknown>,
         value as Record<string, unknown>
-      ) as T[typeof key];
+      );
     } else {
-      result[key] = value as T[typeof key];
+      result[key] = value;
     }
   }
-  return result;
+  return result as T;
 }
 
 export async function resolveCredentials(
