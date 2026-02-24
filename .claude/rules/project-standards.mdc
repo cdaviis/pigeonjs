@@ -1,0 +1,23 @@
+---
+description: Core project coding standards and agent guidance for the Pigeon repo
+alwaysApply: true
+---
+
+# Pigeon Project Standards
+
+- **Prefer templates and the DSL**: When adding or changing notifications, use Pigeon's template DSL (YAML/JSON templates) and Slack DSL blocks instead of hard‑coding payloads where possible.
+- **CI/CD friendly design**: Favour patterns that work well in CI/CD – e.g. using `pigeon send` with `--var`, `--dry-run`, and `--json` rather than bespoke scripts for Slack messages.
+- **Variable handling is case-sensitive**:
+  - `{{USER}}` and `{{user}}` are distinct; do not assume case-insensitive matching.
+  - ALL_CAPS tokens (e.g. `{{MY_ENV_VAR}}`) are candidates for env lookup; mixed‑case tokens are not.
+- **Variable resolution order** (do not change without updating tests/docs):
+  1. Built‑ins: `{{now}}`, `{{timestamp}}`, `{{uuid}}`
+  2. Caller vars (CLI `--var` / API `vars`)
+  3. Env vars for ALL_CAPS tokens
+  4. Template `variables` defaults
+  5. Otherwise: treat as a missing required variable.
+- **Do not override built-ins**: Avoid designs that rely on overriding built‑ins like `{{now}}` or `{{uuid}}`; callers should use different token names instead.
+- **Validate templates early**: Encourage adding or updating `pigeon validate` and `--dry-run` steps in CI when introducing new templates or changing existing ones.
+- **Tests for edge cases**: When changing interpolation, validation, or CLI var handling, add or update tests under `test/core/*` to cover edge cases (env vs vars, defaults, ALL_CAPS tokens, empty strings, circular defaults).
+- **Keep rules and docs in sync**: If you materially change interpolation semantics or DSL behavior, update `docs/edge-cases.md` and any relevant README sections along with the code.
+

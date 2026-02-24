@@ -71,9 +71,9 @@ function extractEnvCredentials(service: string): Record<string, string> {
     }
   }
 
-  // Support shorthand PIGEON_SLACK_TOKEN as an alias for PIGEON_SLACK_BOT_TOKEN
-  if (service === 'slack' && process.env.PIGEON_SLACK_TOKEN) {
-    result.botToken ??= process.env.PIGEON_SLACK_TOKEN;
+  // Support shorthand SLACK_TOKEN as an alias for PIGEON_SLACK_BOT_TOKEN
+  if (service === 'slack' && process.env.SLACK_TOKEN) {
+    result.botToken ??= process.env.SLACK_TOKEN;
   }
 
   return result;

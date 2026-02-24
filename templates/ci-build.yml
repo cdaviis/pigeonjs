@@ -1,0 +1,39 @@
+version: '1'
+name: CI Build Notification
+description: Slack notification for PigeonJS CI runs
+
+destination:
+  service: slack
+  # Target CI notifications channel (channel ID from Slack URL)
+  channel: 'C0AGP1QKWRL'
+
+variables:
+  status:
+    description: Build status (success, failure)
+    required: true
+  branch:
+    description: Git branch
+    required: true
+  sha:
+    description: Commit SHA
+    required: true
+  workflow:
+    description: Workflow name
+    required: true
+  run_url:
+    description: URL to the workflow run
+    required: true
+
+message:
+  blocks:
+    - header:
+        text: ':bird: PigeonJS CI — {{status}}'
+    - section:
+        fields:
+          - '*Branch:*\n`{{branch}}`'
+          - '*Commit:*\n`{{sha}}`'
+    - section:
+        text: '<{{run_url}}|View workflow run ({{workflow}})>'
+    - context:
+        - 'Sent at {{now}}'
+

@@ -2,7 +2,7 @@
   <img src="pigeon.png" alt="pigeon" width="180" />
 </p>
 
-<h1 align="center">Pigeon</h1>
+<h1 align="center">PigeonJS</h1>
 
 <p align="center">
   Template-first messaging for Slack and more.
@@ -14,7 +14,7 @@
 
 ---
 
-Pigeon lets you define your messages as YAML or JSON templates — including the destination, formatting, and variables — and send them from the CLI or your Node.js code.
+PigeonJS lets you define your messages as YAML or JSON templates — including the destination, formatting, and variables — and send them from the CLI or your Node.js code.
 
 ## Features
 
@@ -28,13 +28,13 @@ Pigeon lets you define your messages as YAML or JSON templates — including the
 ## Installation
 
 ```bash
-npm install pigeon
+npm install pigeon-js
 ```
 
 For CLI use, install globally:
 
 ```bash
-npm install -g pigeon
+npm install -g pigeon-js
 ```
 
 ## Quick start
@@ -75,7 +75,7 @@ message:
 **2. Set your credentials:**
 
 ```bash
-export PIGEON_SLACK_TOKEN=xoxb-your-token
+export SLACK_TOKEN=xoxb-your-token
 ```
 
 **3. Send it:**
@@ -124,7 +124,7 @@ pigeon list ./templates
 ## Programmatic API
 
 ```typescript
-import pigeon from 'pigeon';
+import pigeon from 'pigeon-js';
 
 // Send a message
 await pigeon.send('./templates/deploy.yml', { app_name: 'api', version: '1.2.3' });
@@ -183,7 +183,7 @@ Credentials are resolved in this priority order (highest wins):
 ### Environment variables
 
 ```bash
-PIGEON_SLACK_TOKEN=xoxb-...
+SLACK_TOKEN=xoxb-...
 ```
 
 ### Config file (`.pigeon.yml` or `~/.pigeon/config.yml`)

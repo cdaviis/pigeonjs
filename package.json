@@ -1,5 +1,5 @@
 {
-  "name": "pigeon",
+  "name": "pigeon-js",
   "version": "1.0.0",
   "description": "Template-first messaging tool for Slack, Notion, and more",
   "type": "module",

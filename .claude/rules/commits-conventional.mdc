@@ -1,0 +1,35 @@
+---
+description: Commit message conventions for the Pigeon repo (Conventional Commits)
+alwaysApply: true
+---
+
+# Commit Message Rules (Conventional Commits)
+
+- **Use Conventional Commits** as per the spec (`feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci`, etc.) ([conventionalcommits.org](https://www.conventionalcommits.org/en/v1.0.0/)).
+- **Basic format**:
+
+  - `<type>[optional scope]: <description>`
+  - Example: `feat(slack-dsl): support table blocks`
+
+- **Types**:
+  - **`feat`**: new user-facing feature or capability.
+  - **`fix`**: bug fix.
+  - **`docs`**: documentation only.
+  - **`test`**: tests only (no production code changes).
+  - **`refactor`**: code change that neither fixes a bug nor adds a feature.
+  - **`ci`**: CI/CD or workflow changes.
+  - **`chore`**: tooling, deps, or misc tasks not covered above.
+
+- **Breaking changes**:
+  - Prefer `feat!:` / `fix!:` / `refactor!:` or any type with `!` for breaking changes, e.g. `feat!: change interpolation order`.
+  - Optionally add a `BREAKING CHANGE:` footer describing the impact, per the spec.
+
+- **Scope**:
+  - Use a short lowercase scope when helpful (e.g. `core`, `slack`, `dsl`, `cli`, `ci`): `fix(core): handle empty env vars`.
+
+- **Description**:
+  - Use present tense, imperative mood, and keep it concise: `fix: handle empty env vars` rather than `fixed` or `fixes`.
+
+- **Bodies and footers**:
+  - When needed, add a blank line after the subject, then a body explaining the why.
+  - Use standard footers (e.g. `BREAKING CHANGE: ...`, `Refs: #123`) as in the spec.

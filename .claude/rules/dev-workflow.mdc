@@ -1,0 +1,25 @@
+---
+description: Developer workflow for Pigeon (lint, tests, coverage, and pre-commit checks)
+alwaysApply: true
+---
+
+# Dev Workflow & Pre-Commit Checks
+
+- **Run lint before committing**:
+  - Use `npm run lint` (and `npm run typecheck` if touching types or core logic).
+  - Fix style/type issues before asking to commit.
+
+- **Run tests locally**:
+  - Use `npm test` for a quick run while iterating.
+  - Use `npm run test:coverage` for changes that affect core behavior (`src/core`, `src/adapters`, `src/credentials`, `src/cli`).
+
+- **Add or update tests when changing behavior**:
+  - For interpolation, validation, dispatching, credentials, or DSL changes, add/update tests under `test/core/*` or `test/adapters/*`.
+  - Aim to keep coverage healthy for critical paths (loading templates, resolving variables, credentials, adapters).
+
+- **Don’t commit on red**:
+  - Avoid creating commits if lint, typecheck, or tests are failing locally.
+
+- **Align with CI**:
+  - CI already runs `npm run lint`, `npm run typecheck`, `npm run test:coverage`, and `npm run build`. Local changes should be expected to pass the same steps.
+

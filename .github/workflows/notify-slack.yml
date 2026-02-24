@@ -1,0 +1,34 @@
+name: CI Slack Notification
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+jobs:
+  notify:
+    name: Notify Slack with PigeonJS
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install PigeonJS CLI
+        run: npm install -g pigeon-js
+
+      - name: Send CI notification to Slack
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+        run: |
+          pigeon send ./templates/ci-build.yml \
+            --var status=success \
+            --var branch="${{ github.event.workflow_run.head_branch }}" \
+            --var sha="${{ github.event.workflow_run.head_sha }}" \
+            --var workflow="${{ github.event.workflow_run.name }}" \
+            --var run_url="${{ github.event.workflow_run.html_url }}"
