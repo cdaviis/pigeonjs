@@ -1,6 +1,6 @@
 # DSL overview
 
-Pigeon templates use a **template DSL** (domain-specific language): a single YAML or JSON file that defines the message **destination**, **variables**, and **message content**. For Slack, the message can be written in either **raw Slack Block Kit** or Pigeon’s **Slack DSL shorthand**, which compiles to Block Kit for you.
+open-message templates use a **template DSL** (domain-specific language): a single YAML or JSON file that defines the message **destination**, **variables**, and **message content**. For Slack, the message can be written in either **raw Slack Block Kit** or open-message’s **Slack DSL shorthand**, which compiles to Block Kit for you.
 
 ## What is the template DSL?
 
@@ -33,7 +33,7 @@ See [Template structure](02-template-structure.md) for details.
 For Slack, `message` can be:
 
 1. **Raw Block Kit** — The same structure the Slack API expects: `blocks` with objects like `{ type: 'header', text: { type: 'plain_text', text: '...' } }`. You can paste from Slack’s Block Kit Builder.
-2. **Slack DSL shorthand** — A shorter form where each block is a single key (e.g. `header`, `section`, `context`). Pigeon compiles this to Block Kit before sending.
+2. **Slack DSL shorthand** — A shorter form where each block is a single key (e.g. `header`, `section`, `context`). open-message compiles this to Block Kit before sending.
 
 If **any** block in `message.blocks` has a shorthand key (`header`, `section`, `context`, `divider`, `actions`, `image`, `video`, `markdown`, `file`, `table`, `raw`), the whole message is treated as DSL and compiled. Otherwise the message is sent as-is (raw Block Kit).
 

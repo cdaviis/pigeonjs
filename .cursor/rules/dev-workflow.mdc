@@ -1,5 +1,5 @@
 ---
-description: Developer workflow for Pigeon (lint, tests, coverage, and pre-commit checks)
+description: Developer workflow for open-message (lint, tests, coverage, and pre-commit checks)
 alwaysApply: true
 ---
 

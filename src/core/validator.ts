@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { PigeonTemplate } from '../types.js';
+import type { OpenMessageTemplate } from '../types.js';
 import { TemplateValidationError, MissingVariableError } from '../types.js';
 
 const TemplateVariableSchema = z.object({
@@ -34,7 +34,7 @@ const TemplateSchema = z
     { message: 'Either destination (with service) or non-empty destinations array is required' }
   );
 
-export function validateSchema(template: unknown): asserts template is PigeonTemplate {
+export function validateSchema(template: unknown): asserts template is OpenMessageTemplate {
   const result = TemplateSchema.safeParse(template);
   if (!result.success) {
     const details = result.error.issues
@@ -44,7 +44,7 @@ export function validateSchema(template: unknown): asserts template is PigeonTem
   }
 }
 
-export function validateVariables(template: PigeonTemplate, vars: Record<string, string>): void {
+export function validateVariables(template: OpenMessageTemplate, vars: Record<string, string>): void {
   const declared = template.variables ?? {};
   const missing: string[] = [];
 

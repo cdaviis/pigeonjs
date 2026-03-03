@@ -46,20 +46,20 @@ These are evaluated at send time. Do not override them; use different names (e.g
 **CLI:**
 
 ```bash
-pigeon send ./templates/deploy.yml --var app_name=api --var version=1.2.0
+open-message send ./templates/deploy.yml --var app_name=api --var version=1.2.0
 ```
 
 **API:**
 
 ```ts
-await pigeon.send('./templates/deploy.yml', { app_name: 'api', version: '1.2.0' });
+await openMessage.send('./templates/deploy.yml', { app_name: 'api', version: '1.2.0' });
 ```
 
 Names and values are case-sensitive.
 
 ## Environment variables (ALL_CAPS)
 
-If a token is **all uppercase** (e.g. `{{RELEASE_BODY}}`, `{{CHANNEL_ID}}`), Pigeon will try to resolve it from `process.env` when not provided by the caller. Useful in CI so you don’t pass secrets or long values on the command line.
+If a token is **all uppercase** (e.g. `{{RELEASE_BODY}}`, `{{CHANNEL_ID}}`), open-message will try to resolve it from `process.env` when not provided by the caller. Useful in CI so you don’t pass secrets or long values on the command line.
 
 ```yaml
 # In template
@@ -72,7 +72,7 @@ message:
 ```bash
 # In CI
 export RELEASE_BODY="$RELEASE_NOTES"
-pigeon send ./templates/release.yml --var tag_name=v1.0.0 --var html_url=...
+open-message send ./templates/release.yml --var tag_name=v1.0.0 --var html_url=...
 ```
 
 If `RELEASE_BODY` is set in the environment, it is used; otherwise the template’s `variables.RELEASE_BODY.default` (if any) or missing-variable error.
@@ -83,7 +83,7 @@ Use the optional `variables` block to:
 
 - Document what each variable is for
 - Mark required vs optional and set defaults
-- Validate before send (`pigeon validate` checks that required variables are supplied)
+- Validate before send (`open-message validate` checks that required variables are supplied)
 
 ```yaml
 variables:
@@ -125,7 +125,7 @@ message:
 ```
 
 ```bash
-pigeon send ./templates/review.yml --var reviewer_id=U01234ABCD
+open-message send ./templates/review.yml --var reviewer_id=U01234ABCD
 ```
 
 Alternatively, you can pass the full mention string and interpolate it as-is: `--var reviewer='<@U01234ABCD>'` with `text: 'Please review: {{reviewer}}'`.

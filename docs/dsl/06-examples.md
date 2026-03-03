@@ -38,7 +38,7 @@ message:
 ```
 
 ```bash
-pigeon send ./templates/deploy.yml --var app_name=api --var version=2.0.0
+open-message send ./templates/deploy.yml --var app_name=api --var version=2.0.0
 ```
 
 ## CI / test run with link
@@ -132,7 +132,7 @@ In CI, set `RELEASE_BODY` from the release body so multiline notes don’t need 
 env:
   RELEASE_BODY: ${{ github.event.release.body }}
 run: |
-  pigeon send ./templates/release-notification.yml \
+  open-message send ./templates/release-notification.yml \
     --var tag_name="${{ github.event.release.tag_name }}" \
     --var name="${{ github.event.release.name }}" \
     --var html_url="${{ github.event.release.html_url }}"

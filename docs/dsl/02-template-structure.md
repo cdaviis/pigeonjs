@@ -1,6 +1,6 @@
 # Template structure
 
-Every Pigeon template is a single YAML or JSON file with a fixed top-level shape. This page describes each part.
+Every open-message template is a single YAML or JSON file with a fixed top-level shape. This page describes each part.
 
 ## Required fields
 
@@ -14,7 +14,7 @@ version: '1'
 
 ### `name`
 
-A non-empty, human-readable name for the template (e.g. used in logs and `pigeon list`).
+A non-empty, human-readable name for the template (e.g. used in logs and `open-message list`).
 
 ```yaml
 name: Deploy Notification
@@ -127,20 +127,20 @@ message:
 
 ```bash
 # First: send parent (example: capture ts from JSON output in your script)
-pigeon send ./templates/parent.yml --var channel_id=C123 --json
+open-message send ./templates/parent.yml --var channel_id=C123 --json
 
 # Then: send reply (thread_ts comes from the parent response)
-pigeon send ./templates/reply.yml --var thread_ts=1234567890.123456
+open-message send ./templates/reply.yml --var thread_ts=1234567890.123456
 ```
 
 **Programmatic API:** Use the **`response`** from the first send (Slack returns `{ ok: true, ts: "…", channel: "…" }`):
 
 ```ts
-const parent = await pigeon.send('./templates/parent.yml', { channel_id: 'C123' });
+const parent = await openMessage.send('./templates/parent.yml', { channel_id: 'C123' });
 const thread_ts = (parent.response as { ts?: string })?.ts;
 if (thread_ts) {
-  await pigeon.send('./templates/reply.yml', { thread_ts, body: 'First reply' });
-  await pigeon.send('./templates/reply.yml', { thread_ts, body: 'Second reply' });
+  await openMessage.send('./templates/reply.yml', { thread_ts, body: 'First reply' });
+  await openMessage.send('./templates/reply.yml', { thread_ts, body: 'Second reply' });
 }
 ```
 
@@ -158,7 +158,7 @@ description: Posted to #releases when a new GitHub release is created
 
 ### `variables`
 
-Declares variables the template expects. Used for validation (`pigeon validate`), documentation, and default values. Keys are variable names; values can include:
+Declares variables the template expects. Used for validation (`open-message validate`), documentation, and default values. Keys are variable names; values can include:
 
 | Key | Description |
 |-----|--------------|

@@ -38,13 +38,13 @@ async function loadConfigFiles(configFile?: string): Promise<Partial<CredentialS
     candidates.push(path.resolve(configFile));
   } else {
     // Project-level
-    candidates.push(path.resolve(process.cwd(), '.pigeon.yml'));
-    candidates.push(path.resolve(process.cwd(), '.pigeon.yaml'));
-    candidates.push(path.resolve(process.cwd(), '.pigeon.json'));
+    candidates.push(path.resolve(process.cwd(), '.open-message.yml'));
+    candidates.push(path.resolve(process.cwd(), '.open-message.yaml'));
+    candidates.push(path.resolve(process.cwd(), '.open-message.json'));
     // User-level
-    candidates.push(path.join(os.homedir(), '.pigeon', 'config.yml'));
-    candidates.push(path.join(os.homedir(), '.pigeon', 'config.yaml'));
-    candidates.push(path.join(os.homedir(), '.pigeon', 'config.json'));
+    candidates.push(path.join(os.homedir(), '.open-message', 'config.yml'));
+    candidates.push(path.join(os.homedir(), '.open-message', 'config.yaml'));
+    candidates.push(path.join(os.homedir(), '.open-message', 'config.json'));
   }
 
   let merged: Record<string, Record<string, string>> = {};
@@ -57,21 +57,21 @@ async function loadConfigFiles(configFile?: string): Promise<Partial<CredentialS
   return merged as Partial<CredentialStore>;
 }
 
-// Extract PIGEON_{SERVICE}_{KEY} env vars for a specific service
+// Extract OPEN_MESSAGE_{SERVICE}_{KEY} env vars for a specific service
 function extractEnvCredentials(service: string): Record<string, string> {
-  const prefix = `PIGEON_${service.toUpperCase()}_`;
+  const prefix = `OPEN_MESSAGE_${service.toUpperCase()}_`;
   const result: Record<string, string> = {};
 
   for (const [key, value] of Object.entries(process.env)) {
     if (key.startsWith(prefix) && value) {
-      // PIGEON_SLACK_BOT_TOKEN → botToken (camelCase)
+      // OPEN_MESSAGE_SLACK_BOT_TOKEN → botToken (camelCase)
       const suffix = key.slice(prefix.length);
       const camelKey = suffix.toLowerCase().replace(/_([a-z])/g, (_, c: string) => c.toUpperCase());
       result[camelKey] = value;
     }
   }
 
-  // Support shorthand SLACK_TOKEN as an alias for PIGEON_SLACK_BOT_TOKEN
+  // Support shorthand SLACK_TOKEN as an alias for OPEN_MESSAGE_SLACK_BOT_TOKEN
   if (service === 'slack' && process.env.SLACK_TOKEN) {
     result.botToken ??= process.env.SLACK_TOKEN;
   }

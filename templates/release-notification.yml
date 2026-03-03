@@ -14,7 +14,6 @@ variables:
   name:
     description: Release title/name
     required: true
-  # Set RELEASE_BODY in CI env to avoid shell escaping of multiline release notes
   RELEASE_BODY:
     description: Release notes body (or set env RELEASE_BODY in CI)
     default: ''

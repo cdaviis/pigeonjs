@@ -1,6 +1,6 @@
 # Slack blocks (DSL shorthand)
 
-In a Slack template, `message.blocks` can use **DSL shorthand**: each block is a single key (`header`, `section`, `context`, etc.) with a short value shape. Pigeon compiles these to Slack’s Block Kit format before sending. You can also use **raw** Block Kit (objects with `type: 'header'`, etc.); see [Overview](01-overview.md).
+In a Slack template, `message.blocks` can use **DSL shorthand**: each block is a single key (`header`, `section`, `context`, etc.) with a short value shape. open-message compiles these to Slack’s Block Kit format before sending. You can also use **raw** Block Kit (objects with `type: 'header'`, etc.); see [Overview](01-overview.md).
 
 Text inside blocks supports Slack **mrkdwn** by default (bold `*text*`, code `` `code` ``, links `<url|label>`, etc.) unless the block uses `plain_text`.
 

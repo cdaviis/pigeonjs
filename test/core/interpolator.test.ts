@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { interpolate, collectTokens } from '../../src/core/interpolator.js';
-import type { PigeonTemplate } from '../../src/types.js';
+import type { OpenMessageTemplate } from '../../src/types.js';
 
-const baseTemplate: PigeonTemplate = {
+const baseTemplate: OpenMessageTemplate = {
   version: '1',
   name: 'Test',
   destination: { service: 'slack', channel: '#test' },
@@ -11,7 +11,7 @@ const baseTemplate: PigeonTemplate = {
 
 describe('interpolate', () => {
   it('replaces simple {{var}} tokens', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: 'Hello, {{name}}!' },
     };
@@ -21,7 +21,7 @@ describe('interpolate', () => {
   });
 
   it('replaces multiple tokens in one string', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: '{{greeting}}, {{name}}!' },
     };
@@ -30,7 +30,7 @@ describe('interpolate', () => {
   });
 
   it('interpolates nested objects', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: {
         blocks: [{ type: 'section', text: { type: 'mrkdwn', text: '{{msg}}' } }],
@@ -42,7 +42,7 @@ describe('interpolate', () => {
   });
 
   it('uses declared variable defaults', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       variables: { env: { default: 'production' } },
       message: { text: 'Deploying to {{env}}' },
@@ -52,7 +52,7 @@ describe('interpolate', () => {
   });
 
   it('throws MissingVariableError for unknown tokens', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: '{{missing}}' },
     };
@@ -60,7 +60,7 @@ describe('interpolate', () => {
   });
 
   it('resolves ALL_CAPS tokens from env', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: 'Token: {{MY_SECRET}}' },
     };
@@ -69,7 +69,7 @@ describe('interpolate', () => {
   });
 
   it('resolves built-in {{now}} token', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: '{{now}}' },
     };
@@ -79,7 +79,7 @@ describe('interpolate', () => {
   });
 
   it('resolves built-in {{uuid}} token', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: '{{uuid}}' },
     };
@@ -91,7 +91,7 @@ describe('interpolate', () => {
   });
 
   it('interpolates destination fields', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       destination: { service: 'slack', channel: '{{SLACK_CHANNEL}}' },
       message: {},
@@ -101,7 +101,7 @@ describe('interpolate', () => {
   });
 
   it('interpolates object keys', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { '{{key_name}}': 'value' },
     };
@@ -110,7 +110,7 @@ describe('interpolate', () => {
   });
 
   it('passes numbers and booleans through unchanged', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { count: 42, active: true, nothing: null },
     };
@@ -121,7 +121,7 @@ describe('interpolate', () => {
   });
 
   it('throws on circular variable defaults', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       variables: {
         a: { default: '{{b}}' },
@@ -135,7 +135,7 @@ describe('interpolate', () => {
   // ─── Edge cases (see docs/edge-cases.md) ───────────────────────────────────
 
   it('built-ins cannot be overridden by vars', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: '{{now}}' },
     };
@@ -145,7 +145,7 @@ describe('interpolate', () => {
   });
 
   it('caller vars override env for same name (e.g. USER)', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: '{{USER}}' },
     };
@@ -154,7 +154,7 @@ describe('interpolate', () => {
   });
 
   it('ALL_CAPS token with no env and no default throws MissingVariableError', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: '{{NOT_SET_ENV}}' },
     };
@@ -162,7 +162,7 @@ describe('interpolate', () => {
   });
 
   it('empty string is valid for required vars', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       variables: { user: { required: true } },
       message: { text: '{{user}}' },
@@ -172,7 +172,7 @@ describe('interpolate', () => {
   });
 
   it('empty or whitespace-only token throws for missing variable', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: 'x{{  }}y' },
     };
@@ -180,7 +180,7 @@ describe('interpolate', () => {
   });
 
   it('required + default: default is used when var not provided', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       variables: { env: { required: true, default: 'staging' } },
       message: { text: '{{env}}' },
@@ -190,7 +190,7 @@ describe('interpolate', () => {
   });
 
   it('interpolated key can resolve to empty string', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { '{{key}}': 'v' },
     };
@@ -199,7 +199,7 @@ describe('interpolate', () => {
   });
 
   it('case sensitivity: User vs user are different', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       variables: { User: { default: 'DeclaredUser' } },
       message: { text: '{{User}} {{user}}' },
@@ -209,7 +209,7 @@ describe('interpolate', () => {
   });
 
   it('undeclared token in template throws MissingVariableError', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: '{{undeclared}}' },
     };
@@ -217,7 +217,7 @@ describe('interpolate', () => {
   });
 
   it('mixed case {{User}} does not read env USER', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: '{{User}}' },
     };
@@ -225,7 +225,7 @@ describe('interpolate', () => {
   });
 
   it('value with equals sign: var k=a=b=c resolves to a=b=c', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: '{{k}}' },
     };
@@ -234,7 +234,7 @@ describe('interpolate', () => {
   });
 
   it('env value undefined (e.g. custom env in tests) is stringified as "undefined"', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...baseTemplate,
       message: { text: '{{FOO}}' },
     };

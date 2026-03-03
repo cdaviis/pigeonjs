@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { validateSchema, validateVariables } from '../../src/core/validator.js';
-import type { PigeonTemplate } from '../../src/types.js';
+import type { OpenMessageTemplate } from '../../src/types.js';
 
-const validTemplate: PigeonTemplate = {
+const validTemplate: OpenMessageTemplate = {
   version: '1',
   name: 'Test',
   destination: { service: 'slack', channel: '#test' },
@@ -74,7 +74,7 @@ describe('validateSchema', () => {
 
 describe('validateVariables', () => {
   it('passes when all required vars are provided', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...validTemplate,
       variables: { name: { required: true } },
     };
@@ -82,7 +82,7 @@ describe('validateVariables', () => {
   });
 
   it('throws when a required var is missing', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...validTemplate,
       variables: { name: { required: true } },
     };
@@ -90,7 +90,7 @@ describe('validateVariables', () => {
   });
 
   it('does not throw when a missing var has a default', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...validTemplate,
       variables: { env: { default: 'production' } },
     };
@@ -102,7 +102,7 @@ describe('validateVariables', () => {
   });
 
   it('lists all missing required vars in the error', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...validTemplate,
       variables: {
         foo: { required: true },
@@ -113,7 +113,7 @@ describe('validateVariables', () => {
   });
 
   it('empty string satisfies required var', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...validTemplate,
       variables: { user: { required: true } },
     };
@@ -121,7 +121,7 @@ describe('validateVariables', () => {
   });
 
   it('required + default: does not require --var', () => {
-    const template: PigeonTemplate = {
+    const template: OpenMessageTemplate = {
       ...validTemplate,
       variables: { env: { required: true, default: 'staging' } },
     };
