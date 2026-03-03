@@ -187,46 +187,6 @@ slack:
   botToken: xoxb-your-token
 ```
 
-## Slack notifications (CI)
-
-The release and CI notification workflows send to Slack using channel IDs from **Actions secrets** (so channel IDs are not stored in the repo). In **Settings → Secrets and variables → Actions**, add:
-
-| Secret | Used by | Description |
-|--------|---------|-------------|
-| `SLACK_TOKEN` | All Slack workflows | Slack bot token (`xoxb-...`) |
-| `SLACK_CHANNEL_RELEASES` | Publish workflow | Channel ID for #releases |
-| `SLACK_CHANNEL_TESTS` | CI Slack Notification workflow | Channel ID for #tests |
-
-Channel IDs are in the Slack channel URL when you open a channel, or use **Copy link** on the channel.
-
-## Publishing to npm
-
-Releases are automated with [Release Please](https://github.com/googleapis/release-please) and the **Publish to npm** workflow.
-
-### How it works
-
-1. **Use conventional commits** on `main` (e.g. `feat: ...`, `fix: ...`, `docs: ...`). Release Please uses them to decide the next version and to build the changelog.
-2. **Push to main** — Release Please runs and opens (or updates) a **Release PR** that bumps the version in `package.json` and updates `CHANGELOG.md`.
-3. **Merge the Release PR** — Release Please creates the GitHub Release and tag. That triggers the **Publish to npm** workflow (build → publish → Slack #releases).
-
-Example after you land changes:
-
-```bash
-git add -A
-git status   # review
-git commit -m "feat: add template path validation and error handling"
-git push origin main
-```
-
-Then merge the **Release PR** that Release Please opens (or updates). No need to create the release or tag manually.
-
-### Required secrets
-
-In **Settings → Secrets and variables → Actions**:
-
-- **`NPM_TOKEN`** — [npm Access Token](https://www.npmjs.com/settings/~/tokens) with **Automation** or **Publish** permission (used by Publish to npm).
-- **`SLACK_TOKEN`** and **`SLACK_CHANNEL_RELEASES`** — optional; used to post to #releases after publish.
-
 ## License
 
 MIT

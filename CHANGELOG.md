@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.0](https://github.com/cdaviis/pigeon/compare/v1.1.0...v1.2.0) (2026-03-02)
+
+### Features
+
+* limits/chunking, template path validation, Slack threading, simplify Release Please
+
 ## [1.1.0](https://github.com/cdaviis/pigeon/compare/v1.0.0...v1.1.0) (2026-02-24)
 
 
