@@ -9,7 +9,7 @@ on:
 jobs:
   notify-tests:
     name: Post to #tests
-    runs-on: blacksmith-2vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
