@@ -1,6 +1,6 @@
 {
   "name": "open-message",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Template-first messaging tool for Slack, Notion, and more",
   "keywords": [
     "slack",
