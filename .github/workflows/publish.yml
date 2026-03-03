@@ -44,7 +44,7 @@ jobs:
           RELEASE_BODY: ${{ github.event.release.body }}
         run: |
           npm install -g open-message
-          open-message send ./templates/release-notification.yml \
+          npx open-message send ./templates/release-notification.yml \
             --var tag_name="${{ github.event.release.tag_name }}" \
             --var name="${{ github.event.release.name }}" \
             --var html_url="${{ github.event.release.html_url }}"
