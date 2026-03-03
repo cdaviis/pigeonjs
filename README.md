@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.png" alt="open-message logo" width="180" />
+</p>
+
 <h1 align="center">open-message</h1>
 
 <p align="center">
