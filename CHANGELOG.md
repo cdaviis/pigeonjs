@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/cdaviis/open-message/compare/v1.0.0...v1.0.1) (2026-03-03)
+
+
+### Bug Fixes
+
+* **readme:** use new logo header ([ff76f8b](https://github.com/cdaviis/open-message/commit/ff76f8b9b0ddb2f1baaa79479a81ad4daf9529f7))
+
 ## 1.0.0 (2026-03-03)
 
 
