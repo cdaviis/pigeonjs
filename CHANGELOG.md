@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/cdaviis/open-message/compare/v1.0.2...v1.0.3) (2026-03-03)
+
+
+### Bug Fixes
+
+* bump patch version to 1.0.3 ([bfecef0](https://github.com/cdaviis/open-message/commit/bfecef0b67b512b2387be565f40b0e1ce02da0dd))
+
 ## [1.0.2](https://github.com/cdaviis/open-message/compare/v1.0.1...v1.0.2) (2026-03-03)
 
 
