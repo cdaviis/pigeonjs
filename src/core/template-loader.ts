@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import yaml from 'js-yaml';
-import type { PigeonTemplate } from '../types.js';
+import type { OpenMessageTemplate } from '../types.js';
 import { InvalidTemplatePathError, TemplateNotFoundError } from '../types.js';
 
 const ALLOWED_EXTS = ['.yml', '.yaml', '.json'];
@@ -22,15 +22,15 @@ function validateTemplatePath(filePath: string): void {
   }
 }
 
-function parseContent(filePath: string, content: string): PigeonTemplate {
+function parseContent(filePath: string, content: string): OpenMessageTemplate {
   const ext = path.extname(filePath).toLowerCase();
   if (ext === '.json') {
-    return JSON.parse(content) as PigeonTemplate;
+    return JSON.parse(content) as OpenMessageTemplate;
   }
-  return yaml.load(content) as PigeonTemplate;
+  return yaml.load(content) as OpenMessageTemplate;
 }
 
-export async function loadTemplate(filePath: string): Promise<PigeonTemplate> {
+export async function loadTemplate(filePath: string): Promise<OpenMessageTemplate> {
   validateTemplatePath(filePath);
   const resolved = path.resolve(filePath);
 

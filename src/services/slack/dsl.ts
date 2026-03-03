@@ -166,7 +166,7 @@ const SHORTHAND_BLOCK_KEYS = new Set([
 ]);
 
 /**
- * Returns true if the message uses the pigeon DSL shorthand.
+ * Returns true if the message uses the open-message DSL shorthand.
  * A message is DSL if it has a `blocks` array where at least one item
  * has a known shorthand key rather than a `type` key.
  */

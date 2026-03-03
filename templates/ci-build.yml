@@ -1,6 +1,6 @@
 version: '1'
 name: CI Build Notification
-description: Slack notification for PigeonJS CI runs
+description: Slack notification for open-message CI runs
 
 destinations:
   - slack:
@@ -30,7 +30,7 @@ variables:
 messages:
   blocks:
     - header:
-        text: ':bird: PigeonJS CI — {{status}}'
+        text: ':bird: open-message CI — {{status}}'
     - section:
         fields:
           - '*Branch:*\n`{{branch}}`'

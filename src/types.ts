@@ -11,7 +11,7 @@ export interface TemplateDestination {
   [key: string]: unknown;
 }
 
-export interface PigeonTemplate {
+export interface OpenMessageTemplate {
   version: string;
   name: string;
   description?: string;
@@ -23,7 +23,7 @@ export interface PigeonTemplate {
   message: Record<string, unknown>;
 }
 
-export interface ResolvedTemplate extends PigeonTemplate {
+export interface ResolvedTemplate extends OpenMessageTemplate {
   _resolved: true;
 }
 
@@ -86,14 +86,14 @@ export interface ServiceAdapter {
 }
 
 
-export class PigeonError extends Error {
+export class OpenMessageError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'PigeonError';
+    this.name = 'OpenMessageError';
   }
 }
 
-export class TemplateNotFoundError extends PigeonError {
+export class TemplateNotFoundError extends OpenMessageError {
   constructor(name: string, searched: string[]) {
     super(
       `Template "${name}" not found. Searched:\n${searched.map(p => `  - ${p}`).join('\n')}`
@@ -102,14 +102,14 @@ export class TemplateNotFoundError extends PigeonError {
   }
 }
 
-export class InvalidTemplatePathError extends PigeonError {
+export class InvalidTemplatePathError extends OpenMessageError {
   constructor(message: string) {
     super(message);
     this.name = 'InvalidTemplatePathError';
   }
 }
 
-export class MissingVariableError extends PigeonError {
+export class MissingVariableError extends OpenMessageError {
   constructor(tokens: string[], templateName: string) {
     super(
       `Missing required variable${tokens.length > 1 ? 's' : ''} in template "${templateName}": ${tokens.join(', ')}`
@@ -118,7 +118,7 @@ export class MissingVariableError extends PigeonError {
   }
 }
 
-export class UnknownServiceError extends PigeonError {
+export class UnknownServiceError extends OpenMessageError {
   constructor(service: string, available: string[]) {
     super(
       `Unknown service "${service}". Available adapters: ${available.join(', ')}`
@@ -133,7 +133,7 @@ export interface ContentSizeValidationResult {
   violations: string[];
 }
 
-export class ContentSizeError extends PigeonError {
+export class ContentSizeError extends OpenMessageError {
   constructor(
     message: string,
     public readonly stats: ContentSizeValidationResult['stats'],
@@ -144,21 +144,21 @@ export class ContentSizeError extends PigeonError {
   }
 }
 
-export class AdapterValidationError extends PigeonError {
+export class AdapterValidationError extends OpenMessageError {
   constructor(service: string, message: string) {
     super(`[${service}] Invalid message: ${message}`);
     this.name = 'AdapterValidationError';
   }
 }
 
-export class TemplateValidationError extends PigeonError {
+export class TemplateValidationError extends OpenMessageError {
   constructor(details: string) {
     super(`Invalid template schema:\n${details}`);
     this.name = 'TemplateValidationError';
   }
 }
 
-export class MissingCredentialsError extends PigeonError {
+export class MissingCredentialsError extends OpenMessageError {
   constructor(service: string, key: string) {
     super(
       `Missing credentials for "${service}": "${key}" is required.\n` +

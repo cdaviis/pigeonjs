@@ -1,12 +1,12 @@
-name: Publish to npm
+name: Publish
 
 on:
   release:
     types: [created]
 
 jobs:
-  build:
-    name: Test, Lint, and Build
+  test:
+    name: Test
     runs-on: ubuntu-latest
 
     steps:
@@ -26,19 +26,34 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
-      - name: Test (with coverage)
+      - name: Test
         run: npm run test:coverage
 
-      - name: Build
-        run: npm run build
+  codeql:
+    name: CodeQL
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
 
-  publish-npm:
-    name: Publish to npm
-    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  publish:
+    name: Publish open-message
+    needs: [test, codeql]
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write # Required for OIDC/provenance
+      id-token: write
+      packages: write
 
     steps:
       - uses: actions/checkout@v4
@@ -60,16 +75,25 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Install PigeonJS CLI
-        run: npm install -g pigeon-js
+      - name: Publish to GitHub Packages
+        run: |
+          npm pkg set name=@${{ github.repository_owner }}/open-message
+          echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
+          npm publish --registry=https://npm.pkg.github.com --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Notify #releases on Slack
+      - name: Install open-message CLI
+        run: npm install -g open-message
+
+      - name: Notify
         env:
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
           SLACK_CHANNEL_RELEASES: ${{ secrets.SLACK_CHANNEL_RELEASES }}
           RELEASE_BODY: ${{ github.event.release.body }}
         run: |
-          pigeon send ./templates/release-notification.yml \
+          open-message send ./templates/release-notification.yml \
             --var tag_name="${{ github.event.release.tag_name }}" \
             --var name="${{ github.event.release.name }}" \
             --var html_url="${{ github.event.release.html_url }}"

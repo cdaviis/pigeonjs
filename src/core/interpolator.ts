@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type { PigeonTemplate, ResolvedTemplate } from '../types.js';
+import type { OpenMessageTemplate, ResolvedTemplate } from '../types.js';
 import { MissingVariableError } from '../types.js';
 
 const TOKEN_REGEX = /\{\{([^}]+)\}\}/g;
@@ -80,7 +80,7 @@ function walkAndInterpolate(node: unknown, ctx: InterpolationContext): unknown {
 }
 
 export function interpolate(
-  template: PigeonTemplate,
+  template: OpenMessageTemplate,
   vars: Record<string, string>,
   env: NodeJS.ProcessEnv = process.env
 ): ResolvedTemplate {
@@ -101,12 +101,12 @@ export function interpolate(
   };
 
   if (template.destination != null) {
-    result.destination = walkAndInterpolate(template.destination, ctx) as PigeonTemplate['destination'];
+    result.destination = walkAndInterpolate(template.destination, ctx) as OpenMessageTemplate['destination'];
   }
   if (Array.isArray(template.destinations) && template.destinations.length > 0) {
     result.destinations = template.destinations.map((d) =>
       walkAndInterpolate(d, ctx)
-    ) as PigeonTemplate['destinations'];
+    ) as OpenMessageTemplate['destinations'];
   }
 
   return result;

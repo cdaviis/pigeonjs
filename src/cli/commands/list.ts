@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import yaml from 'js-yaml';
-import type { PigeonTemplate } from '../../types.js';
+import type { OpenMessageTemplate } from '../../types.js';
 
 const ALL_EXTS = ['.yml', '.yaml', '.json'];
 
@@ -34,7 +34,7 @@ export function listCommand(): Command {
           const ext = path.extname(filePath).toLowerCase();
           const template = (ext === '.json'
             ? JSON.parse(content)
-            : yaml.load(content)) as PigeonTemplate;
+            : yaml.load(content)) as OpenMessageTemplate;
           results.push({ file: filePath, name: template.name ?? entry, description: template.description });
         } catch {
           results.push({ file: filePath, name: entry });
@@ -59,7 +59,7 @@ export function listCommand(): Command {
         const desc = t.description ? chalk.gray(`  — ${t.description}`) : '';
         console.log(`  ${file}${name}${desc}`);
       }
-      console.log(`\nRun ${chalk.bold('pigeon send <path> --dry-run')} to preview a template.\n`);
+      console.log(`\nRun ${chalk.bold('open-message send <path> --dry-run')} to preview a template.\n`);
     });
 
   return cmd;

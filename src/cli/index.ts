@@ -7,7 +7,7 @@ import { validateCommand } from './commands/validate.js';
 const program = new Command();
 
 program
-  .name('pigeon')
+  .name('open-message')
   .description('Template-first messaging tool for Slack, Notion, and more')
   .version('0.1.0');
 

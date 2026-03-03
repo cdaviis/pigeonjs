@@ -1,20 +1,12 @@
-<p align="center">
-  <img src="pigeon.png" alt="pigeon" width="180" />
-</p>
-
-<h1 align="center">PigeonJS</h1>
+<h1 align="center">open-message</h1>
 
 <p align="center">
   Template-first messaging for Slack and more.
 </p>
 
-<p align="center">
-  <a href="https://codecov.io/gh/cdaviis/pigeon"><img src="https://codecov.io/gh/cdaviis/pigeon/branch/main/graph/badge.svg" alt="Coverage" /></a>
-</p>
-
 ---
 
-PigeonJS lets you define your messages as YAML or JSON templates — including the destination, formatting, and variables — and send them from the CLI or your Node.js code.
+open-message lets you define your messages as YAML or JSON templates — including the destination, formatting, and variables — and send them from the CLI or your Node.js code.
 
 ## Features
 
@@ -43,13 +35,13 @@ Each doc has **Previous** / **Next** links at the bottom to move through the gui
 ## Installation
 
 ```bash
-npm install pigeon-js
+npm install open-message
 ```
 
 For CLI use, install globally:
 
 ```bash
-npm install -g pigeon-js
+npm install -g open-message
 ```
 
 ## Quick start
@@ -97,18 +89,18 @@ export SLACK_TOKEN=xoxb-your-token
 **3. Send it:**
 
 ```bash
-pigeon send ./templates/deploy.yml --var app_name=api --var version=1.2.3
+open-message send ./templates/deploy.yml --var app_name=api --var version=1.2.3
 ```
 
 ## CLI
 
 ```
-pigeon send <path> [options]        Send a message
-pigeon validate <path>              Validate a template
-pigeon list <dir>                   List templates in a directory
+open-message send <path> [options]        Send a message
+open-message validate <path>              Validate a template
+open-message list <dir>                   List templates in a directory
 ```
 
-### `pigeon send` options
+### `open-message send` options
 
 | Flag | Description |
 |---|---|
@@ -122,31 +114,31 @@ pigeon list <dir>                   List templates in a directory
 
 ```bash
 # Send with variables
-pigeon send ./templates/deploy.yml --var app_name=api --var version=2.0.0
+open-message send ./templates/deploy.yml --var app_name=api --var version=2.0.0
 
 # Preview the resolved payload
-pigeon send ./templates/deploy.yml --var app_name=api --var version=2.0.0 --dry-run
+open-message send ./templates/deploy.yml --var app_name=api --var version=2.0.0 --dry-run
 
 # JSON output for CI/CD scripting
-pigeon send ./templates/build-report.yml --var branch=main --var status=passing --json
+open-message send ./templates/build-report.yml --var branch=main --var status=passing --json
 
 # Validate a template
-pigeon validate ./templates/slack-deploy.yml
+open-message validate ./templates/slack-deploy.yml
 
 # List templates in a directory
-pigeon list ./templates
+open-message list ./templates
 ```
 
 ## Programmatic API
 
 ```typescript
-import pigeon from 'pigeon-js';
+import openMessage from 'open-message';
 
 // Send a message
-await pigeon.send('./templates/deploy.yml', { app_name: 'api', version: '1.2.3' });
+await openMessage.send('./templates/deploy.yml', { app_name: 'api', version: '1.2.3' });
 
 // With options (dry-run, limits/chunking for long messages)
-await pigeon.send('./templates/deploy.yml', { app_name: 'api', version: '2.0.0' }, {
+await openMessage.send('./templates/deploy.yml', { app_name: 'api', version: '2.0.0' }, {
   dryRun: true,
   limits: { maxBlocksPerMessage: 40, maxMessageChars: 8000 },
   chunking: { enabled: true, footerTemplate: 'Part {{ index }} of {{ total }}' },
@@ -171,8 +163,8 @@ Credentials are resolved in this priority order (highest wins):
 1. Programmatic `opts.credentials`
 2. CLI `--config <file>`
 3. Environment variables
-4. `.pigeon.yml` in the current directory
-5. `~/.pigeon/config.yml`
+4. `.open-message.yml` in the current directory
+5. `~/.open-message/config.yml`
 
 ### Environment variables
 
@@ -180,7 +172,7 @@ Credentials are resolved in this priority order (highest wins):
 SLACK_TOKEN=xoxb-...
 ```
 
-### Config file (`.pigeon.yml` or `~/.pigeon/config.yml`)
+### Config file (`.open-message.yml` or `~/.open-message/config.yml`)
 
 ```yaml
 slack:

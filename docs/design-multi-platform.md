@@ -1,6 +1,6 @@
 # Multi-platform design: Notion, Teams, and others
 
-This doc outlines what’s already generic in Pigeon, what’s Slack-specific, and what we’d need to redesign or add to support Notion, Microsoft Teams, and other comms platforms.
+This doc outlines what’s already generic in open-message, what’s Slack-specific, and what we’d need to redesign or add to support Notion, Microsoft Teams, and other comms platforms.
 
 ## What already works for multiple services
 
@@ -12,7 +12,7 @@ These parts of the codebase are **service-agnostic** and don’t need to change 
 | **Variables / interpolation** | `{{var}}`, built-ins, env (ALL_CAPS) | Same for every service. |
 | **Dispatcher** | Load → validate schema → validate vars → resolve credentials → interpolate → get adapter → **compile?** → validate message → send | Only adapter lookup and optional `compile()` are service-specific. |
 | **Adapter interface** | `serviceName`, `compile?()`, `validate()`, `send(message, destination, credentials)` | Each platform implements this. |
-| **Credentials** | `CredentialStore` keyed by service; env `PIGEON_{SERVICE}_{KEY}` and shorthand (e.g. `SLACK_TOKEN`) | Add Notion/Teams keys and optional shorthands. |
+| **Credentials** | `CredentialStore` keyed by service; env `OPEN_MESSAGE_{SERVICE}_{KEY}` and shorthand (e.g. `SLACK_TOKEN`) | Add Notion/Teams keys and optional shorthands. |
 
 So: **template shape, routing, variables, and the adapter contract are already generalized.** The main decisions are how **messages** are represented and how much we share across platforms.
 
@@ -50,7 +50,7 @@ So: **template shape, routing, variables, and the adapter contract are already g
 
 ### Option B: Canonical (shared) block model
 
-**Idea:** Define a single **Pigeon block vocabulary** (e.g. `heading`, `paragraph`, `list`, `image`, `divider`, `actions`, `section` with fields). Templates use this canonical form. Each adapter **compiles** canonical → native (Slack Block Kit, Notion blocks, Adaptive Cards).
+**Idea:** Define a single **open-message block vocabulary** (e.g. `heading`, `paragraph`, `list`, `image`, `divider`, `actions`, `section` with fields). Templates use this canonical form. Each adapter **compiles** canonical → native (Slack Block Kit, Notion blocks, Adaptive Cards).
 
 - **Canonical example:**  
   `{ type: 'heading', level: 1, text: '{{title}}' }`  
@@ -65,7 +65,7 @@ So: **template shape, routing, variables, and the adapter contract are already g
 
 **Redesign / tweaks needed:**
 
-1. **Canonical block types** — Define a small schema (TypeScript types + runtime validation) for the canonical blocks and elements. Document it as “Pigeon block DSL” (platform-agnostic). Limit to what maps reasonably to Slack, Notion, and Teams (e.g. headings, paragraphs, lists, images, dividers, key-value sections, buttons/links).
+1. **Canonical block types** — Define a small schema (TypeScript types + runtime validation) for the canonical blocks and elements. Document it as “open-message block DSL” (platform-agnostic). Limit to what maps reasonably to Slack, Notion, and Teams (e.g. headings, paragraphs, lists, images, dividers, key-value sections, buttons/links).
 2. **Template format** — Either:
    - `message.blocks` is an array of canonical blocks (and `destination.service` decides which adapter compiles it), or  
    - Keep `message` service-native and add a separate top-level (e.g. `canonical_blocks`) used only when you want multi-platform; then the adapter compiles from that when present. (More complex.)
@@ -84,7 +84,7 @@ So: **template shape, routing, variables, and the adapter contract are already g
 
 - **API:** Append blocks to a page (`PATCH /v1/blocks/{block_id}/children`) or create a page with children. Blocks are objects with `object: 'block'`, `type`, and a type-specific key (`paragraph`, `heading_1`, `bulleted_list_item`, etc.). Rich text is `rich_text: [ { type: 'text', text: { content: '...' } } ]`.
 - **Destination:** e.g. `page_id` (append) or `database_id` (create page). Optional: `parent` for nesting.
-- **Credentials:** API key (integration). Already in `CredentialStore` as `notion.apiKey`; add env resolution (e.g. `NOTION_API_KEY` or `PIGEON_NOTION_API_KEY`).
+- **Credentials:** API key (integration). Already in `CredentialStore` as `notion.apiKey`; add env resolution (e.g. `NOTION_API_KEY` or `OPEN_MESSAGE_NOTION_API_KEY`).
 - **Mapping from Slack-like ideas:** Header → heading_1/2/3; section text → paragraph; context → paragraph (small) or callout; divider → divider; list → bulleted_list_item / numbered_list_item. Buttons/actions don’t map directly (Notion has no message-level actions in the same way).
 
 ### Microsoft Teams
